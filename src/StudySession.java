@@ -1,20 +1,29 @@
-public class StudySession {
+public class StudySession  extends  PlanItem {
 
     private Course course;
-    private int minutes ;
 
-public StudySession (Course course,int minutes){
+public StudySession (String title, Course course, int estimatedHours, int daysUntilDue){
+    super(title, estimatedHours, daysUntilDue);
     this.course=course;
-    this.minutes=minutes;
+
 }
     public Course getCourse() {
         return course;
     }
-public double hours() {
-    return minutes / 60.0;
-}
+
+    @Override
+    public int calculateUrgency() {
+        if (completed) return 0;
+        return estimatedHours / (daysUntilDue + 1);
+    }
+
+    @Override
+    public boolean isUrgent() {
+        return !completed && daysUntilDue <= 3;
+    }
+
     @Override
     public String toString() {
-        return "StudySession{course='" + course.getName() + "', hours=" + hours() + "}";
+        return "StudySession: " + getBaseInfo() + " | Course: " + course.getName() + " | Urgent: " + isUrgent();
     }
 }

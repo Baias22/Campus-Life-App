@@ -14,64 +14,58 @@ public class CampusLifeApp {
         AssignmentTask task1= new AssignmentTask("objects",pl,3,7);
         AssignmentTask task2 = new AssignmentTask("integral ",Calculus2,2,2);
         AssignmentTask task3 = new AssignmentTask("안녕하세요",korean,4,6);
-        ArrayList<AssignmentTask> tasks = new ArrayList<>();
+
+        StudySession study1 = new StudySession("Review calulus", Calculus2, 2, 2);
+        Club event  = new Club ("ecology","Enactuse",1,12);
+        ExamPreparation event1 = new ExamPreparation ("derivative",Calculus2,10,12);
+        ArrayList<PlanItem> tasks = new ArrayList<>();
+        tasks.add(study1);
         tasks.add(task1);
         tasks.add(task2);
         tasks.add(task3);
+        tasks.add(event);
+        tasks.add(event1);
 
-        ArrayList<StudySession> sessions = new ArrayList<>();
-        sessions.add(new StudySession(pl,180));
-        sessions.add(new StudySession(Calculus2,120));
-        sessions.add(new StudySession(korean,90));
-
-        System.out.println("Courses: ");
-        for (Course c : courses) {
-            System.out.println(c);
+        System.out.println(" All Plan Items ");
+        for (PlanItem item : tasks) {
+            System.out.println(item);
+            System.out.println("------------------ ---");
         }
 
-        System.out.println("Assignments: ");
-        for (AssignmentTask t : tasks) {
-            if (t.isUrgent()) {
-                System.out.println("urgent: " + t);
-            } else {
-                System.out.println(t);
-            }
+        event1.markCompleted();
+
+        System.out.println(" After marking exam as completed ");
+        for (PlanItem item : tasks) {
+            System.out.println(item);
+            System.out.println("------------------___________");
         }
 
         int totalRemaining = 0;
-        for (AssignmentTask t : tasks) {
-            if (!t.isCompleted()) {
-                totalRemaining += t.getEstimatedHours();
+        for (PlanItem item : tasks) {
+            if (!item.isCompleted()) {
+                totalRemaining += item.getEstimatedHours();
             }
         }
         System.out.println("Total remaining hours: " + totalRemaining);
 
-        System.out.println("Study Time Per Course ");
 
-        for (Course c : courses) {
-            double totalHours = 0;
+        PlanItem mostUrgent = null;
+        int maxUrgency = -1;
 
-            for (StudySession s : sessions) {
-                if (s.getCourse().equals(c)) {
-                    totalHours += s.hours();
-                }
-            }
-
-            System.out.println(c.getName() + ": " + totalHours + " hours");
-        }
-
-        task1.markCompleted();
-
-        System.out.println("Updated assignment:");
-        System.out.println(task1);
-
-        totalRemaining = 0;
-        for (AssignmentTask t : tasks) {
-            if (!t.isCompleted()) {
-                totalRemaining += t.getEstimatedHours();
+        for (PlanItem item : tasks) {
+            int urgency = item.calculateUrgency();
+            if (urgency > maxUrgency) {
+                maxUrgency = urgency;
+                mostUrgent = item;
             }
         }
 
-        System.out.println("New remaining hours: " + totalRemaining);
+
+        if (mostUrgent != null) {
+            System.out.println("Most urgent item:");
+            System.out.println(mostUrgent);
+        }
     }
-}
+
+    }
+
